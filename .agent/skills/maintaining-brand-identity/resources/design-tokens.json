@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "brand_name": "[INSERIRE NOME]",
+    "description": "Design token principali per l'implementazione della UI."
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "#000000",
+      "hover": "#333333",
+      "foreground": "#FFFFFF"
+    },
+    "secondary": {
+      "DEFAULT": "#F4F4F5",
+      "foreground": "#18181B"
+    },
+    "background": "#FFFFFF",
+    "foreground": "#09090B",
+    "muted": "#F4F4F5",
+    "accent": "#F4F4F5",
+    "destructive": "#EF4444",
+    "success": "#10B981"
+  },
+  "typography": {
+    "font_family_headings": [
+      "Inter",
+      "sans-serif"
+    ],
+    "font_family_body": [
+      "Roboto",
+      "sans-serif"
+    ],
+    "font_weight_bold": "700",
+    "font_weight_normal": "400"
+  },
+  "breakpoints": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+  "ui": {
+    "border_radius_default": "0.5rem",
+    "border_radius_small": "0.25rem",
+    "spacing_base_unit": "4px",
+    "shadow_sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    "shadow_default": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+    "shadow_md": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+    "transition_duration": "150ms",
+    "transition_timing": "cubic-bezier(0.4, 0, 0.2, 1)"
+  }
+}
