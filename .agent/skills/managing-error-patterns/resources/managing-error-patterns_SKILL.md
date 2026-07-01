@@ -1,6 +1,6 @@
 ---
 name: managing-error-patterns
-description: Padroneggia i pattern di gestione degli errori in Node.js/TypeScript, inclusi eccezioni tipizzate, tipi Result, propagazione degli errori e degradazione aggraziata per costruire applicazioni resilienti. Usare durante l'implementazione della gestione degli errori, la progettazione di API o il miglioramento dell'affidabilità dell'applicazione.
+description: Padroneggia i pattern di gestione degli errori in Node.js/TypeScript, inclusi eccezioni tipizzate (AppError), tipi Result, propagazione degli errori e degradazione aggraziata per costruire applicazioni resilienti. Usare durante l'implementazione della gestione degli errori, la progettazione di API o il miglioramento dell'affidabilità dell'applicazione.
 ---
 
 # Pattern di Gestione degli Errori (Node.js / TypeScript)
@@ -32,12 +32,10 @@ Costruisci applicazioni resilienti con strategie di gestione degli errori robust
 **Recuperabili**: timeout di rete, file mancanti, input utente non valido, rate limit API.
 **Irrecuperabili**: memoria esaurita, stack overflow, bug di programmazione (null pointer, ecc.).
 
-## Pattern in TypeScript/JavaScript
-
-### Gerarchia di Eccezioni Personalizzate
+## Gerarchia di Eccezioni del Progetto
 
 ```typescript
-class ApplicationError extends Error {
+class AppError extends Error {
   constructor(
     message: string,
     public code: string,
@@ -50,21 +48,27 @@ class ApplicationError extends Error {
   }
 }
 
-class ValidationError extends ApplicationError {
+class ValidationError extends AppError {
   constructor(message: string, details?: Record<string, any>) {
     super(message, "VALIDATION_ERROR", 400, details);
   }
 }
 
-class NotFoundError extends ApplicationError {
+class NotFoundError extends AppError {
   constructor(resource: string, id: string) {
     super(`${resource} non trovato`, "NOT_FOUND", 404, { resource, id });
   }
 }
 
-class ExternalServiceError extends ApplicationError {
+class NetworkError extends AppError {
   constructor(message: string, public service: string, details?: Record<string, any>) {
-    super(message, "EXTERNAL_SERVICE_ERROR", 502, details);
+    super(message, "NETWORK_ERROR", 502, details);
+  }
+}
+
+class DatabaseError extends AppError {
+  constructor(message: string, details?: Record<string, any>) {
+    super(message, "DATABASE_ERROR", 500, details);
   }
 }
 
@@ -76,9 +80,9 @@ function getUser(id: string): User {
 }
 ```
 
-Per la struttura completa della gerarchia (categorie, metadati, tracciabilità), vedi `resources/exception-hierarchy-design.md`.
+Per la struttura completa della gerarchia (quando aggiungere categorie, come incapsulare errori Prisma), vedi `resources/exception-hierarchy-design.md`.
 
-### Pattern del Tipo Result
+## Pattern del Tipo Result
 
 ```typescript
 type Result<T, E = Error> = { ok: true; value: T } | { ok: false; error: E };
@@ -98,13 +102,12 @@ function parseJSON<T>(json: string): Result<T, SyntaxError> {
   }
 }
 
-// Concatenare Result
 function chain<T, U, E>(result: Result<T, E>, fn: (value: T) => Result<U, E>): Result<U, E> {
   return result.ok ? fn(result.value) : result;
 }
 ```
 
-### Gestione Errori Asincroni
+## Gestione Errori Asincroni
 
 ```typescript
 async function fetchUserOrders(userId: string): Promise<Order[]> {
@@ -113,16 +116,15 @@ async function fetchUserOrders(userId: string): Promise<Order[]> {
     return await getOrders(user.id);
   } catch (error) {
     if (error instanceof NotFoundError) return [];
-    if (error instanceof ExternalServiceError) return retryFetchOrders(userId);
+    if (error instanceof NetworkError) return retryFetchOrders(userId);
     throw error; // rilancia errori inaspettati
   }
 }
 
-// Fetch con gestione esplicita degli errori HTTP
 function fetchData(url: string): Promise<Data> {
   return fetch(url)
     .then((response) => {
-      if (!response.ok) throw new ExternalServiceError(`HTTP ${response.status}`, url);
+      if (!response.ok) throw new NetworkError(`HTTP ${response.status}`, url);
       return response.json();
     })
     .catch((error) => {
@@ -161,7 +163,7 @@ class CircuitBreaker {
         this.state = CircuitState.HALF_OPEN;
         this.successCount = 0;
       } else {
-        throw new ExternalServiceError("Circuit breaker è OPEN", "unknown");
+        throw new NetworkError("Circuit breaker è OPEN", "unknown");
       }
     }
     try {
@@ -229,7 +231,6 @@ async function withFallback<T>(primary: () => Promise<T>, fallback: () => Promis
   }
 }
 
-// Utilizzo
 const profile = await withFallback(
   () => fetchFromCache(userId),
   () => fetchFromDatabase(userId),
@@ -247,7 +248,7 @@ Per strategie di retry, fallback multipli e queueing, vedi `resources/error-reco
 5. **Gestisci al Livello Giusto**: cattura dove puoi gestire in modo significativo.
 6. **Pulisci le Risorse**: usa `try/finally`, chiudi connessioni Prisma esplicitamente.
 7. **Non Inghiottire gli Errori**: logga o rilancia, mai `catch` vuoti.
-8. **Errori Type-Safe**: estendi sempre `ApplicationError`, mai `throw` di stringhe o oggetti generici.
+8. **Errori Type-Safe**: estendi sempre `AppError`, mai `throw` di stringhe o oggetti generici.
 
 ```typescript
 // Esempio completo: gestione errori in un service Express
@@ -264,9 +265,9 @@ async function processOrder(orderId: string): Promise<Order> {
     await db.save(order);
     return order;
   } catch (e) {
-    if (e instanceof ApplicationError) throw e;
+    if (e instanceof AppError) throw e;
     console.error(`Pagamento fallito per l'ordine ${orderId}:`, e);
-    throw new ExternalServiceError("Elaborazione pagamento fallita", "payment_service", {
+    throw new NetworkError("Elaborazione pagamento fallita", "payment_service", {
       orderId,
       amount: order.total,
     });

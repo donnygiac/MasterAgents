@@ -13,7 +13,7 @@ Questa skill guida la progettazione di database MySQL ottimizzati per il motore 
 - **Output**: Proposte motivate, alternative, checklist di validazione e DDL come proposta testuale (mai eseguita).
 
 ## Working Mode (Step-by-step)
-Quando procedi alla progettazione, segui rigorosamente questi step. Fermati dopo ogni deliverable per validazione. Salva i progressi in `.agent/skills/designing-mysql-tables/ideas/<project-name>.md`.
+Quando procedi alla progettazione, segui rigorosamente questi step. Fermati dopo ogni deliverable per validazione. Salva i progressi in `.claude/skills/designing-mysql-tables/ideas/<project-name>.md`.
 
 ### Step 0 — Context Snapshot
 Raccogli informazioni su:
