@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "brand_name": "DA-COMPILARE: nome del brand dal brandbook.pdf",
+    "description": "Design token del brand. Fonte brand (valori dal brandbook): NON è l'implementazione.",
+    "bootstrap": "Popolare con il Prompt 1 del README del kit leggendo brandbook.pdf. Non inventare valori assenti dal brandbook: usare la stringa 'non definito nel brandbook'.",
+    "implementation_files": [
+      "DA-COMPILARE: percorso tailwind.config del progetto",
+      "DA-COMPILARE: percorso del CSS globale con le variabili tema"
+    ],
+    "conflict_rule": "In caso di divergenza vince l'implementazione nel codice. Segnala la divergenza all'utente, non sovrascrivere. Usa solo classi semantiche Tailwind, mai hex arbitrari.",
+    "known_divergences": []
+  },
+  "colors": {
+    "primary": {
+      "DEFAULT": "DA-COMPILARE",
+      "hover": "DA-COMPILARE",
+      "foreground": "DA-COMPILARE"
+    },
+    "secondary": {
+      "DEFAULT": "DA-COMPILARE",
+      "foreground": "DA-COMPILARE"
+    },
+    "neutral": {
+      "black": "DA-COMPILARE",
+      "dark-gray": "DA-COMPILARE",
+      "light-gray": "DA-COMPILARE"
+    },
+    "background": "DA-COMPILARE",
+    "foreground": "DA-COMPILARE",
+    "muted": "DA-COMPILARE",
+    "accent": "DA-COMPILARE",
+    "destructive": "DA-COMPILARE",
+    "success": "DA-COMPILARE"
+  },
+  "typography": {
+    "font_family_headings": ["DA-COMPILARE", "sans-serif"],
+    "font_family_body": ["DA-COMPILARE", "sans-serif"],
+    "font_family_logo": ["DA-COMPILARE"],
+    "font_weight_bold": "700",
+    "font_weight_normal": "400"
+  },
+  "breakpoints": {
+    "sm": "640px",
+    "md": "768px",
+    "lg": "1024px",
+    "xl": "1280px",
+    "2xl": "1536px"
+  },
+  "ui": {
+    "border_radius_default": "DA-COMPILARE",
+    "border_radius_small": "DA-COMPILARE",
+    "border_radius_large": "DA-COMPILARE",
+    "spacing_base_unit": "4px",
+    "shadow_sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+    "shadow_default": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+    "shadow_md": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+    "transition_duration": "150ms",
+    "transition_timing": "cubic-bezier(0.4, 0, 0.2, 1)"
+  }
+}

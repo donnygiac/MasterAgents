@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(codegraph status)",
+      "Bash(codegraph status *)",
+      "Bash(codegraph sync)",
+      "Bash(codegraph sync *)",
+      "Bash(codegraph files)",
+      "Bash(codegraph files *)",
+      "Bash(codegraph query *)",
+      "Bash(codegraph callers *)",
+      "Bash(codegraph callees *)",
+      "Bash(codegraph impact *)",
+      "Bash(codegraph node *)",
+      "Bash(codegraph explore *)",
+      "Bash(codegraph affected *)"
+    ]
+  }
+}
